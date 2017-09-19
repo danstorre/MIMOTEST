@@ -12,6 +12,7 @@ import Alamofire
 enum Router: URLRequestConvertible {
     case login(parameters: Parameters)
     case singup(parameters: Parameters)
+    case logOut(parameters: Parameters)
     
     static let baseURLString = "https://mimo-test.auth0.com"
     
@@ -19,6 +20,8 @@ enum Router: URLRequestConvertible {
         switch self {
         case .login,.singup:
             return .post
+        case .logOut:
+            return .get
         }
     }
     
@@ -28,12 +31,17 @@ enum Router: URLRequestConvertible {
             return "/oauth/ro"
         case .singup:
             return "/dbconnections/signup"
+        case .logOut:
+            return "/v2/logout"
         }
     }
+    
     var headers: HTTPHeaders {
         switch self {
         case .login,.singup:
             return ["Content-Type": "application/json"]
+        case .logOut:
+            return [String:String]()
         }
     }
     // MARK: URLRequestConvertible
@@ -73,6 +81,15 @@ enum Router: URLRequestConvertible {
                 "user_metadata": ""
             ]
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: singupParams)
+        case .logOut(let parameters):
+            
+            guard let client_id = parameters["client_id"] else {
+                return urlRequest
+            }
+            let singupParams = [
+                "client_id": client_id
+            ]
+            urlRequest = try URLEncoding.queryString.encode(urlRequest, with: singupParams)
         }
         
         return urlRequest
