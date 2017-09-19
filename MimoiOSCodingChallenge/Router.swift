@@ -11,12 +11,13 @@ import Alamofire
 
 enum Router: URLRequestConvertible {
     case login(parameters: Parameters)
+    case singup(parameters: Parameters)
     
     static let baseURLString = "https://mimo-test.auth0.com"
     
     var method: HTTPMethod {
         switch self {
-        case .login:
+        case .login,.singup:
             return .post
         }
     }
@@ -25,11 +26,13 @@ enum Router: URLRequestConvertible {
         switch self {
         case .login:
             return "/oauth/ro"
+        case .singup:
+            return "/dbconnections/signup"
         }
     }
     var headers: HTTPHeaders {
         switch self {
-        case .login:
+        case .login,.singup:
             return ["Content-Type": "application/json"]
         }
     }
@@ -56,6 +59,20 @@ enum Router: URLRequestConvertible {
                 "scope": "openid profile email"
             ]
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: loginParams)
+        case .singup(let parameters):
+            urlRequest.allHTTPHeaderFields = headers
+            
+            guard let email = parameters["email"], let pass = parameters["pass"] else {
+                return urlRequest
+            }
+            let singupParams = [
+                "client_id": "PAn11swGbMAVXVDbSCpnITx5Utsxz1co",
+                "email": email,
+                "password": pass,
+                "connection": "Username-Password-Authentication",
+                "user_metadata": ""
+            ]
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: singupParams)
         }
         
         return urlRequest

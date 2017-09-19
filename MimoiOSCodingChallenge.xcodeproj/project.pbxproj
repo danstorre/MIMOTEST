@@ -133,9 +133,9 @@
 		2BF3DEF41E54B79A004DD445 /* MimoiOSCodingChallenge */ = {
 			isa = PBXGroup;
 			children = (
+				FB82DFCF1F7169DB00C4B1A7 /* Login */,
 				FB82DFCD1F7161E900C4B1A7 /* ExtensionViewController.swift */,
 				FB82DFCC1F714FD200C4B1A7 /* Networking */,
-				FB82DFCA1F714FCF00C4B1A7 /* LoginViewController.swift */,
 				2BF3DEF81E54B79A004DD445 /* AppDelegate.h */,
 				2BF3DEF91E54B79A004DD445 /* AppDelegate.m */,
 				2BF3DEFB1E54B79A004DD445 /* ViewController.h */,
@@ -210,6 +210,14 @@
 				FB82DFC81F714FC800C4B1A7 /* Router.swift */,
 			);
 			name = Networking;
+			sourceTree = "<group>";
+		};
+		FB82DFCF1F7169DB00C4B1A7 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				FB82DFCA1F714FCF00C4B1A7 /* LoginViewController.swift */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -24,7 +24,8 @@ class LoginViewController: UIViewController {
         configureTextfields()
         configureButtonLogin()
         setUpLoginStackView()
-        self.view.backgroundColor = UIColor.blue
+        self.view.backgroundColor = UIColor.cyan
+        
         self.view.needsUpdateConstraints()
     }
     
@@ -37,13 +38,60 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func validateTexfields(){
+        
+        guard emailTexfield.text! != "" else {
+            return self.displayAlert("Missing email", completionHandler: {})
+        }
+        
+        guard passTextField.text! != "" else {
+            return self.displayAlert("Missing password", completionHandler: {})
+        }
+    }
+    
     func login(){
         
+        
+        validateTexfields()
+        
+        buttonLogin.isEnabled = false
+        
+        let params = [
+            "email" : emailTexfield.text!,
+            "pass" : passTextField.text!
+        ]
+        
+        Alamofire.request(Router.login(parameters: params)).responseJSON { response in
+            DispatchQueue.main.async {
+                self.buttonLogin.isEnabled = true
+            
+            
+            guard let json = response.result.value as? [String:AnyObject] else {
+                return
+            }
+                print("JSON: \(json)") //  json response
+                guard let id = json["id_token"] else {
+                    
+                    if let errorDescription = json["error_description"] as? String {
+                        self.displayAlert(errorDescription, completionHandler: {})
+                    }
+                    return
+                }
+                
+                
+                
+            
+            
+            
+            }
+        }
     }
     
     func configureButtonLogin(){
-        buttonLogin = UIButton(forAutoLayout: ())
+        buttonLogin = UIButton(type: .roundedRect)
+    
         buttonLogin.setTitle("Login!", for: UIControlState.normal)
+        
         buttonLogin.addTarget(self, action: #selector(login), for: UIControlEvents.touchUpInside)
     }
     
