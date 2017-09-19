@@ -27,14 +27,12 @@ enum Router: URLRequestConvertible {
             return "/oauth/ro"
         }
     }
-    
     var headers: HTTPHeaders {
         switch self {
         case .login:
             return ["Content-Type": "application/json"]
         }
     }
-    
     // MARK: URLRequestConvertible
     
     func asURLRequest() throws -> URLRequest {

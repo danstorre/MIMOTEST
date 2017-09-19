@@ -77,6 +77,7 @@ class LoginViewController: UIViewController {
         
         self.view.addSubview(stackLogin)
         NSLayoutConstraint.activate([centerYStack,centerXStack,widthStack])
+
     }
 
     /*
