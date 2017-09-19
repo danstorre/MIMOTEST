@@ -100,7 +100,7 @@ class LoginViewController: UIViewController {
         }
         return true
     }
-    func toggleButtonsEnabled(){
+    func toggleButtons(){
         buttonSingup.isEnabled = !buttonSingup.isEnabled
         buttonLogin.isEnabled = !buttonLogin.isEnabled
     }
@@ -114,14 +114,15 @@ fileprivate extension LoginViewController {
         guard validateTexfields() else {
             return
         }
-        toggleButtonsEnabled()
+        toggleButtons()
         let params = [
             "email" : emailTexfield.text!,
             "pass" : passTextField.text!
         ]
+        
         Alamofire.request(Router.singup(parameters: params)).responseJSON { response in
             DispatchQueue.main.async {
-                self.toggleButtonsEnabled()
+                self.toggleButtons()
                 guard let json = response.result.value as? [String:AnyObject] else {
                     return
                 }
@@ -153,7 +154,7 @@ fileprivate extension LoginViewController {
             return
         }
         
-        toggleButtonsEnabled()
+        toggleButtons()
         
         let params = [
             "email" : emailTexfield.text!,
@@ -161,26 +162,62 @@ fileprivate extension LoginViewController {
         ]
         
         Alamofire.request(Router.login(parameters: params)).responseJSON { response in
-            DispatchQueue.main.async {
-                self.toggleButtonsEnabled()
+            
+            
                 
                 guard let json = response.result.value as? [String:AnyObject] else {
+                    DispatchQueue.main.async {
+                        self.toggleButtons()
+                    }
                     return
+                    
                 }
                 
                 print("JSON: \(json)") //  json response
-                guard let _ = json["id_token"] else {
+                guard let idToken = json["id_token"] as? String, let accessToken = json["access_token"] as? String else {
                     
                     if let errorDescription = json["error_description"] as? String {
-                        self.displayAlert(errorDescription, completionHandler: {})
-                    }
+                        DispatchQueue.main.async {
+                            self.toggleButtons()
+                            self.displayAlert(errorDescription, completionHandler: {})}
+                        }
                     return
                 }
-                let settingsVC = SettingsViewController()
+                UserSession.shared.idToken = idToken
+                UserSession.shared.accessToken = accessToken
                 
-                self.navigationController?.pushViewController(settingsVC, animated: true)
-            }
+                
+                Alamofire.request(Router.userinfo()).responseJSON { response in
+                    
+                    guard let json = response.result.value as? [String:AnyObject] else {
+                        DispatchQueue.main.async {
+                            self.toggleButtons()
+                        }
+                        return
+                    }
+                    
+                    
+                    if let errorDescription = json["error_description"] as? String {
+                        DispatchQueue.main.async {
+                            self.toggleButtons()
+                            self.displayAlert(errorDescription, completionHandler: {})}
+                    }
+                    
+                    guard let email = json["email"] as? String, let nickname = json["nickname"] as? String else {
+                        return
+                    }
+                    
+                    UserSession.shared.userObject = User(dict: ["email": email,"nickname": nickname])
+                    
+                    let settingsVc = SettingsViewController()
+                    DispatchQueue.main.async {
+                        self.toggleButtons()
+                        self.navigationController?.pushViewController(settingsVc, animated: true)
+                    }
+                }
+                
         }
+        
     }
     
 }

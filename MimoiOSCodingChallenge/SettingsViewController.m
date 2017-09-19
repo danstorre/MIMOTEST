@@ -281,7 +281,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
         UILabel *emailLabel = [[UILabel alloc] init];
         emailLabel.translatesAutoresizingMaskIntoConstraints = NO;
         emailLabel.font = [UIFont systemFontOfSize:self.emailLabelFontSize];
-        emailLabel.text = @"you@getmimo.com";
+        emailLabel.text = UserSession.shared.userObject.email;
         emailLabel.textColor = [UIColor grayColor];
         [headerView addSubview:emailLabel];
         

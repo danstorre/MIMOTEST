@@ -13,6 +13,7 @@ enum Router: URLRequestConvertible {
     case login(parameters: Parameters)
     case singup(parameters: Parameters)
     case logOut(parameters: Parameters)
+    case userinfo()
     
     static let baseURLString = "https://mimo-test.auth0.com"
     
@@ -20,7 +21,7 @@ enum Router: URLRequestConvertible {
         switch self {
         case .login,.singup:
             return .post
-        case .logOut:
+        case .logOut,.userinfo:
             return .get
         }
     }
@@ -33,6 +34,8 @@ enum Router: URLRequestConvertible {
             return "/dbconnections/signup"
         case .logOut:
             return "/v2/logout"
+        case .userinfo:
+            return "/userinfo"
         }
     }
     
@@ -42,6 +45,8 @@ enum Router: URLRequestConvertible {
             return ["Content-Type": "application/json"]
         case .logOut:
             return [String:String]()
+        case .userinfo:
+            return ["Authorization": "Bearer \(UserSession.shared.accessToken)"]
         }
     }
     // MARK: URLRequestConvertible
@@ -90,6 +95,8 @@ enum Router: URLRequestConvertible {
                 "client_id": client_id
             ]
             urlRequest = try URLEncoding.queryString.encode(urlRequest, with: singupParams)
+        case .userinfo():
+            urlRequest.allHTTPHeaderFields = headers
         }
         
         return urlRequest
