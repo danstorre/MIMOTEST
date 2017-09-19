@@ -11,7 +11,6 @@
 		2BCC6AB91E55A68400585FA1 /* SettingsAvatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BCC6AB81E55A68400585FA1 /* SettingsAvatar.m */; };
 		2BF3DEF71E54B79A004DD445 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BF3DEF61E54B79A004DD445 /* main.m */; };
 		2BF3DEFA1E54B79A004DD445 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BF3DEF91E54B79A004DD445 /* AppDelegate.m */; };
-		2BF3DEFD1E54B79A004DD445 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BF3DEFC1E54B79A004DD445 /* ViewController.m */; };
 		2BF3DF021E54B79A004DD445 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BF3DF011E54B79A004DD445 /* Assets.xcassets */; };
 		2BF3DF051E54B79A004DD445 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BF3DF031E54B79A004DD445 /* LaunchScreen.storyboard */; };
 		2BF3DF101E54B79A004DD445 /* MimoiOSCodingChallengeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BF3DF0F1E54B79A004DD445 /* MimoiOSCodingChallengeTests.m */; };
@@ -24,6 +23,7 @@
 		FB82DFC91F714FC800C4B1A7 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB82DFC81F714FC800C4B1A7 /* Router.swift */; };
 		FB82DFCB1F714FCF00C4B1A7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB82DFCA1F714FCF00C4B1A7 /* LoginViewController.swift */; };
 		FB82DFCE1F7161EA00C4B1A7 /* ExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB82DFCD1F7161E900C4B1A7 /* ExtensionViewController.swift */; };
+		FB82DFD11F71791B00C4B1A7 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB82DFD01F71791B00C4B1A7 /* UserSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,8 +53,6 @@
 		2BF3DEF61E54B79A004DD445 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2BF3DEF81E54B79A004DD445 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2BF3DEF91E54B79A004DD445 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		2BF3DEFB1E54B79A004DD445 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		2BF3DEFC1E54B79A004DD445 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		2BF3DF011E54B79A004DD445 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BF3DF041E54B79A004DD445 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2BF3DF061E54B79A004DD445 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,6 +76,7 @@
 		FB82DFC81F714FC800C4B1A7 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		FB82DFCA1F714FCF00C4B1A7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		FB82DFCD1F7161E900C4B1A7 /* ExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionViewController.swift; sourceTree = "<group>"; };
+		FB82DFD01F71791B00C4B1A7 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,8 +137,6 @@
 				FB82DFCC1F714FD200C4B1A7 /* Networking */,
 				2BF3DEF81E54B79A004DD445 /* AppDelegate.h */,
 				2BF3DEF91E54B79A004DD445 /* AppDelegate.m */,
-				2BF3DEFB1E54B79A004DD445 /* ViewController.h */,
-				2BF3DEFC1E54B79A004DD445 /* ViewController.m */,
 				2BF3DF291E54B7DF004DD445 /* SettingsViewController.h */,
 				2BF3DF2A1E54B7DF004DD445 /* SettingsViewController.m */,
 				2BF3DF2B1E54B7DF004DD445 /* SettingsViewController.swift */,
@@ -216,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				FB82DFCA1F714FCF00C4B1A7 /* LoginViewController.swift */,
+				FB82DFD01F71791B00C4B1A7 /* UserSession.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -519,8 +517,8 @@
 			files = (
 				FB82DFCB1F714FCF00C4B1A7 /* LoginViewController.swift in Sources */,
 				FB82DFC91F714FC800C4B1A7 /* Router.swift in Sources */,
+				FB82DFD11F71791B00C4B1A7 /* UserSession.swift in Sources */,
 				2BCC6AB91E55A68400585FA1 /* SettingsAvatar.m in Sources */,
-				2BF3DEFD1E54B79A004DD445 /* ViewController.m in Sources */,
 				2BF3DEFA1E54B79A004DD445 /* AppDelegate.m in Sources */,
 				2BCC6AB61E55A55A00585FA1 /* SettingsTableViewCell.swift in Sources */,
 				FB82DFCE1F7161EA00C4B1A7 /* ExtensionViewController.swift in Sources */,

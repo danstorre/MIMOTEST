@@ -554,7 +554,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 }
 
 - (void)logout {
-
+    [UserSession.shared logOutWithNavControoller:self.navigationController];
 }
 
 - (void)restoreWithCell:(SettingsTableViewCell *)cell {
