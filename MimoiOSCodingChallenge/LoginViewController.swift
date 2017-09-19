@@ -163,8 +163,6 @@ fileprivate extension LoginViewController {
         
         Alamofire.request(Router.login(parameters: params)).responseJSON { response in
             
-            
-                
                 guard let json = response.result.value as? [String:AnyObject] else {
                     DispatchQueue.main.async {
                         self.toggleButtons()
@@ -203,11 +201,14 @@ fileprivate extension LoginViewController {
                             self.displayAlert(errorDescription, completionHandler: {})}
                     }
                     
-                    guard let email = json["email"] as? String, let nickname = json["nickname"] as? String else {
+                    guard let email = json["email"] as? String, let nickname = json["nickname"] as? String, let picture = json["picture"] as? String else {
+                        DispatchQueue.main.async {
+                            self.toggleButtons()
+                        }
                         return
                     }
                     
-                    UserSession.shared.userObject = User(dict: ["email": email,"nickname": nickname])
+                    UserSession.shared.userObject = User(dict: ["email": email,"nickname": nickname,"picture": picture])
                     
                     let settingsVc = SettingsViewController()
                     DispatchQueue.main.async {

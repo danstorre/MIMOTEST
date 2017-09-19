@@ -32,12 +32,25 @@ class UserSession : NSObject {
             navControoller.popToRootViewController(animated: true)
         }
     }
+    
+    func getAvatarImage(completionHandlerForGettingImage: @escaping (UIImage, Bool) -> Void) {
+            
+            let imageURL = userObject.picture
+            let url = URL(string: imageURL)
+            
+            guard let data = try? Data(contentsOf: url!) else {
+                return completionHandlerForGettingImage(UIImage(),false)
+            }
+            
+            completionHandlerForGettingImage(UIImage(data: data)!,true)
+    }
 }
 
 
 class User : NSObject {
     var email: String = ""
     var nickName: String = ""
+    var picture: String = ""
     
     
     init(dict: [String: String]){
@@ -48,6 +61,10 @@ class User : NSObject {
         
         if let nickName = dict["nickname"]{
             self.nickName = nickName
+        }
+        
+        if let pic = dict["picture"]{
+            self.picture = pic
         }
         
         super.init()

@@ -278,6 +278,22 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
         NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:avatar attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:-16.f];
         [headerView addConstraint:centerY];
         
+        [[UserSession shared] getAvatarImageWithCompletionHandlerForGettingImage:^(UIImage *image, BOOL success) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (success){
+                    UIImageView *imageAvatar = [[UIImageView alloc] initWithImage:image];
+                    [avatar addSubview: imageAvatar];
+                    NSLayoutConstraint *width = [[imageAvatar widthAnchor] constraintEqualToConstant:70];
+                    NSLayoutConstraint *height = [[imageAvatar heightAnchor] constraintEqualToConstant:70];
+                    [imageAvatar autoCenterInSuperview];
+                    [NSLayoutConstraint activateConstraints:@[width,height]];
+                }
+            });
+            
+            
+        }];
+        
         UILabel *emailLabel = [[UILabel alloc] init];
         emailLabel.translatesAutoresizingMaskIntoConstraints = NO;
         emailLabel.font = [UIFont systemFontOfSize:self.emailLabelFontSize];
