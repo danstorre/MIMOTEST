@@ -16,8 +16,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	LoginViewController *vc = [[LoginViewController alloc] init];
-	self.window.rootViewController = vc;
+	LoginViewController *loginVc = [[LoginViewController alloc] init];
+    
+    UINavigationController *nav = [[UINavigationController alloc] init];
+    [nav pushViewController:loginVc animated:false];
+	self.window.rootViewController = nav;
 	[self.window makeKeyAndVisible];
 	return YES;
 }

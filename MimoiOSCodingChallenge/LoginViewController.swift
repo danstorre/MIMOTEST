@@ -26,8 +26,9 @@ class LoginViewController: UIViewController {
         configureTextfields()
         configureButtonsLogin()
         setUpLoginStackView()
-        self.view.backgroundColor = UIColor.cyan
         
+        self.navigationController?.isNavigationBarHidden = true
+        self.view.backgroundColor = UIColor.cyan
         self.view.needsUpdateConstraints()
     }
     
@@ -40,99 +41,15 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func validateTexfields() -> Bool{
-        guard emailTexfield.text! != "" else {
-            self.displayAlert("Missing email", completionHandler: {})
-            return false
-        }
-        guard passTextField.text! != "" else {
-            self.displayAlert("Missing password", completionHandler: {})
-            return false
-        }
-        return true
-    }
-    func toggleButtonsEnabled(){
-        buttonSingup.isEnabled = !buttonSingup.isEnabled
-        buttonLogin.isEnabled = !buttonLogin.isEnabled
-    }
-    
-    func singUp(){
-        guard validateTexfields() else {
-            return 
-        }
-        toggleButtonsEnabled()
-        let params = [
-            "email" : emailTexfield.text!,
-            "pass" : passTextField.text!
-        ]
-        Alamofire.request(Router.singup(parameters: params)).responseJSON { response in
-            DispatchQueue.main.async {
-                self.toggleButtonsEnabled()
-                
-                
-                guard let json = response.result.value as? [String:AnyObject] else {
-                    return
-                }
-                if let errorDescription = json["error"] as? String  {
-                    return self.displayAlert(errorDescription, completionHandler: {})
-                }
-                
-                print("JSON: \(json)") //  json response
-                guard let id = json["email"] else {
-                    
-                    if let errorDescription = json["error_description"] as? String {
-                        self.displayAlert(errorDescription, completionHandler: {})
-                    }
-                    return
-                }
-                self.displayMessage("Success","Go ahead and login with your new accout. An email as been sent to you for verification too.", completionHandler: {})
-            }
-        }
-    }
-    
-    func login(){
-        
-        
-        guard validateTexfields() else {
-            return
-        }
-        
-        toggleButtonsEnabled()
-        
-        let params = [
-            "email" : emailTexfield.text!,
-            "pass" : passTextField.text!
-        ]
-        
-        Alamofire.request(Router.login(parameters: params)).responseJSON { response in
-            DispatchQueue.main.async {
-                self.toggleButtonsEnabled()
-            
-            
-            guard let json = response.result.value as? [String:AnyObject] else {
-                return
-            }
-                
-            print("JSON: \(json)") //  json response
-            guard let id = json["id_token"] else {
-                    
-                if let errorDescription = json["error_description"] as? String {
-                    self.displayAlert(errorDescription, completionHandler: {})
-                }
-                return
-            }
-            
-            }
-        }
-    }
+    //MARK:- configure methods
     
     func configureButtonsLogin(){
         buttonLogin = UIButton(type: .roundedRect)
         buttonLogin.setTitle("Login!", for: UIControlState.normal)
-        buttonLogin.addTarget(self, action: #selector(login), for: UIControlEvents.touchUpInside)
+        buttonLogin.addTarget(self, action: #selector(self.login), for: UIControlEvents.touchUpInside)
         buttonSingup = UIButton(type: .roundedRect)
         buttonSingup.setTitle("Sing up", for: UIControlState.normal)
-        buttonSingup.addTarget(self, action: #selector(singUp), for: UIControlEvents.touchUpInside)
+        buttonSingup.addTarget(self, action: #selector(self.singUp), for: UIControlEvents.touchUpInside)
     }
     
     func configureTextfields(){
@@ -140,6 +57,7 @@ class LoginViewController: UIViewController {
         emailTexfield.backgroundColor = UIColor.white
         emailTexfield.placeholder = "enter email"
         passTextField = UITextField(forAutoLayout: ())
+        passTextField.isSecureTextEntry = true
         passTextField.backgroundColor = UIColor.white
         passTextField.placeholder = "enter pass"
         //todo delegate
@@ -166,17 +84,103 @@ class LoginViewController: UIViewController {
         
         self.view.addSubview(stackLogin)
         NSLayoutConstraint.activate([centerYStack,centerXStack,widthStack])
-
+        
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    //MARK:- Utils
+    
+    func validateTexfields() -> Bool{
+        guard emailTexfield.text! != "" else {
+            self.displayAlert("Missing email", completionHandler: {})
+            return false
+        }
+        guard passTextField.text! != "" else {
+            self.displayAlert("Missing password", completionHandler: {})
+            return false
+        }
+        return true
     }
-    */
+    func toggleButtonsEnabled(){
+        buttonSingup.isEnabled = !buttonSingup.isEnabled
+        buttonLogin.isEnabled = !buttonLogin.isEnabled
+    }
+    
+}
 
+//MARK:- Login Methods
+fileprivate extension LoginViewController {
+    
+    @objc func singUp(){
+        guard validateTexfields() else {
+            return
+        }
+        toggleButtonsEnabled()
+        let params = [
+            "email" : emailTexfield.text!,
+            "pass" : passTextField.text!
+        ]
+        Alamofire.request(Router.singup(parameters: params)).responseJSON { response in
+            DispatchQueue.main.async {
+                self.toggleButtonsEnabled()
+                guard let json = response.result.value as? [String:AnyObject] else {
+                    return
+                }
+                if let errorDescription = json["error"] as? String  {
+                    return self.displayAlert(errorDescription, completionHandler: {})
+                }
+                if let statusCode = json["statusCode"] as? Int, !((statusCode >= 200) && (statusCode < 300))  {
+                    if let errorDesc = json["description"] as? String{
+                        self.displayAlert(errorDesc, completionHandler: {})
+                    }
+                    return
+                }
+                
+                print("JSON: \(json)") //  json response
+                guard let _ = json["email"] else {
+                    if let errorDescription = json["error_description"] as? String {
+                        self.displayAlert(errorDescription, completionHandler: {})
+                    }
+                    return
+                }
+                self.displayMessage("Success","Go ahead and login with your new accout. An email as been sent to you for verification too.", completionHandler: {})
+            }
+        }
+    }
+    
+    @objc func login(){
+        
+        guard validateTexfields() else {
+            return
+        }
+        
+        toggleButtonsEnabled()
+        
+        let params = [
+            "email" : emailTexfield.text!,
+            "pass" : passTextField.text!
+        ]
+        
+        Alamofire.request(Router.login(parameters: params)).responseJSON { response in
+            DispatchQueue.main.async {
+                self.toggleButtonsEnabled()
+                
+                guard let json = response.result.value as? [String:AnyObject] else {
+                    return
+                }
+                
+                print("JSON: \(json)") //  json response
+                guard let _ = json["id_token"] else {
+                    
+                    if let errorDescription = json["error_description"] as? String {
+                        self.displayAlert(errorDescription, completionHandler: {})
+                    }
+                    return
+                }
+                let settingsVC = SettingsViewController()
+                
+                self.navigationController?.pushViewController(settingsVC, animated: true)
+            }
+        }
+    }
+    
 }
