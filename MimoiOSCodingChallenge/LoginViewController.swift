@@ -40,7 +40,6 @@ class LoginViewController: UIViewController {
         super.viewWillAppear(animated)
         DispatchQueue.main.async {
             self.view.backgroundColor = Theme(rawValue: ThemeManager.currentTheme())!.mainColor
-            
         }
     }
     override func didReceiveMemoryWarning() {

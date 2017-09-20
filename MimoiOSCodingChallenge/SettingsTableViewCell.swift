@@ -14,8 +14,8 @@ class SettingsTableViewCell : UITableViewCell {
 	
 	weak var delegate : SettingsTableViewCellDelegate?
 	let selectionSwitch = UISwitch()
-	let label = UILabel()
-	let secondaryLabel = UILabel()
+	public let label = UILabel()
+	public let secondaryLabel = UILabel()
 	let activityIndicator = UIActivityIndicatorView()
 	private var didSetConstraints = false
 	
@@ -25,7 +25,7 @@ class SettingsTableViewCell : UITableViewCell {
 		selectionStyle = .default
 		
 		label.font = UIFont.systemFont(ofSize: 14)
-		
+        label.textColor = Theme(rawValue: ThemeManager.currentTheme())?.labelColor
 		contentView.addSubview(label)
 		contentView.addSubview(selectionSwitch)
 		contentView.addSubview(activityIndicator)

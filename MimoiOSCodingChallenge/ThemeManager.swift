@@ -34,12 +34,37 @@ class ThemeManager : NSObject{
             UITextField.appearance().tintColor = theme.textFieldFore
             
             UIActivityIndicatorView.appearance().color = theme.indicator
+            
+            UITableViewCell.appearance().backgroundColor = theme.mainColor
+            UITableView.appearance().backgroundColor = theme.mainColor
+            
+            UISwitch.appearance().thumbTintColor = theme.switchThumbnail
+            UISwitch.appearance().onTintColor = theme.switchOn
         }
     }
 }
 
 enum Theme : Int {
     case Default, Dark
+    
+    var switchThumbnail: UIColor{
+        switch self {
+        case .Default:
+            return UIColor.green
+        case .Dark:
+            return UIColor.orange
+        }
+    }
+    
+    var switchOn: UIColor{
+        switch self {
+        case .Default:
+            return UIColor.green.withAlphaComponent(0.3)
+        case .Dark:
+            return UIColor.orange.withAlphaComponent(0.3)
+        }
+    }
+    
     
     var viewBackGround: UIColor{
         switch self {
@@ -50,12 +75,23 @@ enum Theme : Int {
         }
     }
     
+    var labelColor: UIColor {
+        switch self {
+        case .Default:
+            return UIColor.black
+        case .Dark:
+            return UIColor.white
+        }
+        
+    }
+    
+    
     var mainColor: UIColor {
         switch self {
         case .Default:
             return UIColor.white
         case .Dark:
-            return UIColor.darkGray.withAlphaComponent(0.4)
+            return UIColor.darkGray
         }
     }
     
