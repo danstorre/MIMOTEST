@@ -19,23 +19,30 @@ class LoginViewController: UIViewController {
     var buttonLogin: UIButton = UIButton()
     var buttonSingup: UIButton = UIButton()
     var stackLogin: UIStackView = UIStackView()
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         configureTextfields()
         configureButtonsLogin()
-        setUpLoginStackView()
+        setUpLoginStackViewAndActivity()
         
         self.navigationController?.isNavigationBarHidden = true
-        self.view.backgroundColor = UIColor.cyan
+        
         self.view.needsUpdateConstraints()
+        
+        let gest = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        self.view.addGestureRecognizer(gest)
+        
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        DispatchQueue.main.async {
+            self.view.backgroundColor = Theme(rawValue: ThemeManager.currentTheme())!.mainColor
+            
+        }
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -47,29 +54,41 @@ class LoginViewController: UIViewController {
         buttonLogin = UIButton(type: .roundedRect)
         buttonLogin.setTitle("Login!", for: UIControlState.normal)
         buttonLogin.addTarget(self, action: #selector(self.login), for: UIControlEvents.touchUpInside)
+        buttonLogin.layer.borderWidth = 1
+        buttonLogin.layer.cornerRadius = 4
         buttonSingup = UIButton(type: .roundedRect)
         buttonSingup.setTitle("Sing up", for: UIControlState.normal)
         buttonSingup.addTarget(self, action: #selector(self.singUp), for: UIControlEvents.touchUpInside)
+        buttonSingup.layer.borderWidth = 1
+        buttonSingup.layer.cornerRadius = 4
+        ThemeManager.applyTheme(theme: ThemeManager.currentTheme())
     }
     
     func configureTextfields(){
         emailTexfield = UITextField(forAutoLayout: ())
-        emailTexfield.backgroundColor = UIColor.white
         emailTexfield.placeholder = "enter email"
+        emailTexfield.delegate = self
+        emailTexfield.borderStyle = .roundedRect
+        emailTexfield.layer.borderWidth = 1
+        emailTexfield.layer.cornerRadius = 4
         passTextField = UITextField(forAutoLayout: ())
         passTextField.isSecureTextEntry = true
-        passTextField.backgroundColor = UIColor.white
         passTextField.placeholder = "enter pass"
-        //todo delegate
+        passTextField.delegate = self
+        passTextField.borderStyle = .roundedRect
+        passTextField.layer.borderWidth = 1
+        passTextField.layer.cornerRadius = 4
     }
     
-    func setUpLoginStackView(){
+    func setUpLoginStackViewAndActivity(){
+        
+        activityIndicator.hidesWhenStopped = true
         
         stackLogin = UIStackView(forAutoLayout: ())
         stackLogin.axis = .vertical
         stackLogin.distribution = .fillProportionally
         stackLogin.alignment = .fill
-        stackLogin.spacing = 40
+        stackLogin.spacing = 20
         
         stackLogin.addArrangedSubview(emailTexfield)
         stackLogin.addArrangedSubview(passTextField)
@@ -78,16 +97,23 @@ class LoginViewController: UIViewController {
         
         let margins = view.layoutMarginsGuide
         
-        let centerYStack = stackLogin.centerYAnchor.constraint(equalTo: margins.centerYAnchor)
+        let centerYStack = stackLogin.centerYAnchor.constraint(equalTo: margins.centerYAnchor, constant: -70)
         let centerXStack = stackLogin.centerXAnchor.constraint(equalTo: margins.centerXAnchor)
         let widthStack = stackLogin.widthAnchor.constraint(equalTo: margins.widthAnchor, multiplier: 0.9)
         
         self.view.addSubview(stackLogin)
-        NSLayoutConstraint.activate([centerYStack,centerXStack,widthStack])
+        activityIndicator.center = self.view.center
+        self.view.addSubview(activityIndicator)
         
+        NSLayoutConstraint.activate([centerYStack,centerXStack,widthStack])
     }
     
     //MARK:- Utils
+    func hideKeyboard(){
+        emailTexfield.resignFirstResponder()
+        passTextField.resignFirstResponder()
+    }
+    
     
     func validateTexfields() -> Bool{
         guard emailTexfield.text! != "" else {
@@ -103,6 +129,21 @@ class LoginViewController: UIViewController {
     func toggleButtons(){
         buttonSingup.isEnabled = !buttonSingup.isEnabled
         buttonLogin.isEnabled = !buttonLogin.isEnabled
+        buttonLogin.isEnabled ? activityIndicator.stopAnimating() : activityIndicator.startAnimating()
+    }
+    
+}
+
+extension LoginViewController : UITextFieldDelegate{
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let textfields = [emailTexfield,passTextField]
+        let remainTextfields = textfields.filter { (textfieldOnArray) -> Bool in
+            return textField != textfieldOnArray && textField.text != "" && textfieldOnArray.text == ""
+        }
+        textField.resignFirstResponder()
+        if remainTextfields.count == 1 {remainTextfields[0].becomeFirstResponder() }
+        return true
     }
     
 }

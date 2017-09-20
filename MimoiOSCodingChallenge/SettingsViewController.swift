@@ -6,6 +6,10 @@
 extension SettingsViewController : SettingsTableViewCellDelegate {
 	
 	func switchChangedValue(switcher: UISwitch) {
-		
+        let theme : Theme = switcher.isOn ? Theme.Dark : Theme.Default
+        ThemeManager.applyTheme(theme: theme.rawValue)
 	}
+    
 }
+
+

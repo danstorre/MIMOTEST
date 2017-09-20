@@ -21,7 +21,7 @@ class SettingsTableViewCell : UITableViewCell {
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		backgroundColor = UIColor.white
+        //backgroundColor = Theme(rawValue: ThemeManager.currentTheme())?.mainColor
 		selectionStyle = .default
 		
 		label.font = UIFont.systemFont(ofSize: 14)
@@ -61,6 +61,7 @@ class SettingsTableViewCell : UITableViewCell {
 	}
 	
 	@objc private func switched() {
+        
 		delegate?.switchChangedValue(switcher: selectionSwitch)
 	}
 	

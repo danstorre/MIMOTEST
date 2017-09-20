@@ -27,9 +27,9 @@ class UserSession : NSObject {
         let params = [
             "client_id" : idToken
         ]
+        navControoller.popToRootViewController(animated: true)
         
         Alamofire.request(Router.logOut(parameters: params)).responseJSON { response in
-            navControoller.popToRootViewController(animated: true)
         }
     }
     

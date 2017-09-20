@@ -52,7 +52,6 @@ static const CGFloat kSettingsSectionHeaderHeightStandard       = 42.0;
 static const CGFloat kSettingsStandardRowHeight                 = 48.0;
 static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 
-
 @interface SettingsViewController () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
@@ -141,8 +140,8 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = [UIColor grayColor];
-    self.tableView.backgroundColor = [UIColor whiteColor];
+    //here self.tableView.separatorColor = [UIColor grayColor];
+    //here self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
 
     NSDictionary *views = @{ @"tableView": self.tableView };
@@ -261,7 +260,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *headerView = [[UIView alloc] init];
-    headerView.backgroundColor = [UIColor clearColor];
+    //here headerView.backgroundColor = [UIColor clearColor];
     
     if (section == SettingsTableSectionAuthentication) {
 		SettingsAvatar *avatar;
@@ -291,14 +290,13 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
                 }
             });
             
-            
         }];
         
         UILabel *emailLabel = [[UILabel alloc] init];
         emailLabel.translatesAutoresizingMaskIntoConstraints = NO;
         emailLabel.font = [UIFont systemFontOfSize:self.emailLabelFontSize];
         emailLabel.text = UserSession.shared.userObject.email;
-        emailLabel.textColor = [UIColor grayColor];
+        //here emailLabel.textColor = [UIColor grayColor];
         [headerView addSubview:emailLabel];
         
         centerX = [NSLayoutConstraint constraintWithItem:emailLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.f];
@@ -314,7 +312,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
     sectionLabel.translatesAutoresizingMaskIntoConstraints = NO;
     sectionLabel.font = [UIFont systemFontOfSize:self.tableSectionHeaderFontSize];
     sectionLabel.text = self.tableSectionHeaderTitles[@(section)].uppercaseString;
-    sectionLabel.textColor = [UIColor lightGrayColor];
+    //here sectionLabel.textColor = [UIColor lightGrayColor];
     [headerView addSubview:sectionLabel];
     
     NSDictionary *views = @{ @"sectionLabel": sectionLabel };
@@ -333,19 +331,19 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
     if (section != [self numberOfSectionsInTableView:self.tableView] - 1) return nil;
     
     UIView *footerView = [[UIView alloc] init];
-    footerView.backgroundColor = [UIColor clearColor];
+    //here footerView.backgroundColor = [UIColor clearColor];
     
     UILabel *versionLabel = [[UILabel alloc] init];
     versionLabel.translatesAutoresizingMaskIntoConstraints = NO;
     versionLabel.font = [UIFont systemFontOfSize:10.0];
-    versionLabel.textColor = [UIColor lightGrayColor];
+    //here versionLabel.textColor = [UIColor lightGrayColor];
     versionLabel.textAlignment = NSTextAlignmentCenter;
     versionLabel.text = @"Version 1.0";
     
     UILabel *copyrightLabel = [[UILabel alloc] init];
     copyrightLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	copyrightLabel.font = [UIFont systemFontOfSize:10.0];
-    copyrightLabel.textColor = [UIColor lightGrayColor];
+    //here copyrightLabel.textColor = [UIColor lightGrayColor];
     copyrightLabel.textAlignment = NSTextAlignmentCenter;
     copyrightLabel.text = @"Mimo loves you!";
     
@@ -371,7 +369,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)configureCell forRowAtIndexPath:(NSIndexPath *)indexPath {
     SettingsTableViewCell *cell = (SettingsTableViewCell *)configureCell;
     
-    cell.contentView.backgroundColor = [UIColor whiteColor];
+    //here cell.contentView.backgroundColor = [UIColor whiteColor];
     cell.activityIndicator.hidden = YES;
 
 	cell.secondaryLabel.hidden = YES;
@@ -381,7 +379,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 		if (indexPath.row == SettingsTableSectionNotificationRowSwitch) {
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			cell.selectionSwitch.hidden = NO;
-			BOOL switchOn = NO;
+			BOOL switchOn = [[NSUserDefaults standardUserDefaults] boolForKey: @"SelectedTheme"];
 			
 			[cell.selectionSwitch setOn:switchOn animated:NO];
 			cell.delegate = self;
@@ -399,19 +397,19 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 #if !TARGET_MIMO
 	cell.label.text = NSLocalizedString(@"DownloadMimo", nil);
 #endif
-            cell.label.textColor = [UIColor greenColor];
+            //here cell.label.textColor = [UIColor greenColor];
             cell.label.hidden = NO;
         }
     } else if (indexPath.section == SettingsTableSectionShare && indexPath.row == SettingsTableSectionShareRowAppStore) {
         // hide  RATE US ON THE APP STORE if user is NOT a subscriber
         if (self.userSubscribed) {
-            cell.label.textColor = [UIColor greenColor];
+            //here cell.label.textColor = [UIColor greenColor];
             cell.label.hidden = NO;
         } else {
             cell.label.hidden = YES;
         }
     } else {
-        cell.label.textColor = [UIColor grayColor];
+        //here cell.label.textColor = [UIColor grayColor];
         cell.label.hidden = NO;
     }
 }

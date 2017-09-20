@@ -15,6 +15,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
+    
+    [ThemeManager applyThemeWithTheme:[ThemeManager currentTheme]];
+    
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	LoginViewController *loginVc = [[LoginViewController alloc] init];
     
