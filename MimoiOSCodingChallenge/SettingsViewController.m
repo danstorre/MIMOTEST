@@ -52,6 +52,8 @@ static const CGFloat kSettingsSectionHeaderHeightStandard       = 42.0;
 static const CGFloat kSettingsStandardRowHeight                 = 48.0;
 static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 
+
+
 @interface SettingsViewController () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
@@ -93,6 +95,19 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 	[self.view addSubview:self.timePicker];
 	 */
 	[self.view setNeedsUpdateConstraints];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveTestNotification)
+                                                 name:@"DarkmodeNotification"
+                                               object:nil];
+}
+
+- (void)receiveTestNotification{
+    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.tableView.backgroundColor = [ThemeManager currentTheme] == 1 ? [UIColor darkGrayColor] : [UIColor whiteColor];
+        //[ThemeManager applyThemeWithTheme: [ThemeManager currentTheme]];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -140,8 +155,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    //here self.tableView.separatorColor = [UIColor grayColor];
-    //here self.tableView.backgroundColor = [UIColor whiteColor];
+    
     [self.view addSubview:self.tableView];
 
     NSDictionary *views = @{ @"tableView": self.tableView };
@@ -260,7 +274,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *headerView = [[UIView alloc] init];
-    //here headerView.backgroundColor = [UIColor clearColor];
+    
     
     if (section == SettingsTableSectionAuthentication) {
 		SettingsAvatar *avatar;
@@ -296,7 +310,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
         emailLabel.translatesAutoresizingMaskIntoConstraints = NO;
         emailLabel.font = [UIFont systemFontOfSize:self.emailLabelFontSize];
         emailLabel.text = UserSession.shared.userObject.email;
-        //here emailLabel.textColor = [UIColor grayColor];
+        emailLabel.textColor = [ThemeManager currentTheme] == 1 ? [UIColor whiteColor] : [UIColor lightGrayColor];
         [headerView addSubview:emailLabel];
         
         centerX = [NSLayoutConstraint constraintWithItem:emailLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.f];
@@ -312,7 +326,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
     sectionLabel.translatesAutoresizingMaskIntoConstraints = NO;
     sectionLabel.font = [UIFont systemFontOfSize:self.tableSectionHeaderFontSize];
     sectionLabel.text = self.tableSectionHeaderTitles[@(section)].uppercaseString;
-    //here sectionLabel.textColor = [UIColor lightGrayColor];
+    sectionLabel.textColor = [ThemeManager currentTheme] == 1 ? [UIColor whiteColor] : [UIColor lightGrayColor];
     [headerView addSubview:sectionLabel];
     
     NSDictionary *views = @{ @"sectionLabel": sectionLabel };
@@ -331,19 +345,19 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
     if (section != [self numberOfSectionsInTableView:self.tableView] - 1) return nil;
     
     UIView *footerView = [[UIView alloc] init];
-    //here footerView.backgroundColor = [UIColor clearColor];
+    
     
     UILabel *versionLabel = [[UILabel alloc] init];
     versionLabel.translatesAutoresizingMaskIntoConstraints = NO;
     versionLabel.font = [UIFont systemFontOfSize:10.0];
-    //here versionLabel.textColor = [UIColor lightGrayColor];
+    versionLabel.textColor = [ThemeManager currentTheme] == 1 ? [UIColor whiteColor] : [UIColor lightGrayColor];
     versionLabel.textAlignment = NSTextAlignmentCenter;
     versionLabel.text = @"Version 1.0";
     
     UILabel *copyrightLabel = [[UILabel alloc] init];
     copyrightLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	copyrightLabel.font = [UIFont systemFontOfSize:10.0];
-    //here copyrightLabel.textColor = [UIColor lightGrayColor];
+    copyrightLabel.textColor = [ThemeManager currentTheme] == 1 ? [UIColor whiteColor] : [UIColor lightGrayColor];
     copyrightLabel.textAlignment = NSTextAlignmentCenter;
     copyrightLabel.text = @"Mimo loves you!";
     
@@ -369,7 +383,7 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)configureCell forRowAtIndexPath:(NSIndexPath *)indexPath {
     SettingsTableViewCell *cell = (SettingsTableViewCell *)configureCell;
     
-    //here cell.contentView.backgroundColor = [UIColor whiteColor];
+    cell.backgroundColor = [ThemeManager currentTheme] == 1 ? [UIColor darkGrayColor] : [UIColor whiteColor];
     cell.activityIndicator.hidden = YES;
 
 	cell.secondaryLabel.hidden = YES;
@@ -397,19 +411,19 @@ static const CGFloat kSettingsSectionFooterHeight               = 48.0;
 #if !TARGET_MIMO
 	cell.label.text = NSLocalizedString(@"DownloadMimo", nil);
 #endif
-            //here cell.label.textColor = [UIColor greenColor];
+            cell.label.textColor = [UIColor greenColor];
             cell.label.hidden = NO;
         }
     } else if (indexPath.section == SettingsTableSectionShare && indexPath.row == SettingsTableSectionShareRowAppStore) {
         // hide  RATE US ON THE APP STORE if user is NOT a subscriber
         if (self.userSubscribed) {
-            //here cell.label.textColor = [UIColor greenColor];
+            cell.label.textColor = [UIColor greenColor];
             cell.label.hidden = NO;
         } else {
             cell.label.hidden = YES;
         }
     } else {
-        //here cell.label.textColor = [UIColor grayColor];
+        cell.label.textColor = [ThemeManager currentTheme] == 1 ? [UIColor whiteColor] : [UIColor darkGrayColor];
         cell.label.hidden = NO;
     }
 }

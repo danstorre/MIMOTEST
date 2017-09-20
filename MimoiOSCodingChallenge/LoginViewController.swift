@@ -35,12 +35,22 @@ class LoginViewController: UIViewController {
         let gest = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         self.view.addGestureRecognizer(gest)
         
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         DispatchQueue.main.async {
             self.view.backgroundColor = Theme(rawValue: ThemeManager.currentTheme())!.mainColor
+            
+            let buttons = [self.buttonLogin,self.buttonSingup]
+            for button in buttons{
+                button.tintColor = Theme(rawValue: ThemeManager.currentTheme())!.buttonfore
+                button.backgroundColor = Theme(rawValue: ThemeManager.currentTheme())!.buttonback
+            }
+            self.activityIndicator.color = Theme(rawValue: ThemeManager.currentTheme())!.indicator
         }
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -112,7 +122,6 @@ class LoginViewController: UIViewController {
         emailTexfield.resignFirstResponder()
         passTextField.resignFirstResponder()
     }
-    
     
     func validateTexfields() -> Bool{
         guard emailTexfield.text! != "" else {

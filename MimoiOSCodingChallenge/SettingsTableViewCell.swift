@@ -61,7 +61,6 @@ class SettingsTableViewCell : UITableViewCell {
 	}
 	
 	@objc private func switched() {
-        
 		delegate?.switchChangedValue(switcher: selectionSwitch)
 	}
 	

@@ -40,6 +40,9 @@ class ThemeManager : NSObject{
             
             UISwitch.appearance().thumbTintColor = theme.switchThumbnail
             UISwitch.appearance().onTintColor = theme.switchOn
+            
+            //label colors are in code.
+            //cell colors are in code.
         }
     }
 }
